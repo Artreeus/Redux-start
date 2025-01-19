@@ -1,29 +1,41 @@
-import { Itask } from "@/types";
-import { createSlice } from "@reduxjs/toolkit";
+import { RootState } from "@/redux/store";
+import { ITask } from "@/types";
+import { createSlice, nanoid, PayloadAction } from "@reduxjs/toolkit";
 
-interface InitialState {
-  task: Itask[];
+interface IinitialState {
+  tasks: ITask[];
 }
-
-
-
-const initialState : InitialState = {
-  task: [
+const initialState: IinitialState = {
+  tasks: [
     {
-      id: 0,
-      title: "Initialize frontend project",
-      description: "Create a new frontend project using Vite",
-      dueDate: "2025-02-01",
+      id: "R3GJo-fJg1XW25V92l-SG",
       isCompleted: false,
-      priority: "High",
+      title: "hfhsdk;afjk;djf",
+      description: "dfdpfdik[dkfdvljkdojfdvnakjgkjjdf",
+      priority: "Medium",
+      dueDate: "2025-01-27T18:00:00.000Z",
     },
   ],
 };
-
+type DarftTask = Pick<ITask, "title" | "description" | "dueDate" | "priority">;
+const createTask = (taskData: DarftTask): ITask => {
+  return { id: nanoid(), isCompleted: false, ...taskData };
+};
 const taskSlice = createSlice({
   name: "task",
   initialState,
-  reducers: {},
+  reducers: {
+    addTask: (state, action: PayloadAction<ITask>) => {
+      const taskdata = createTask(action.payload);
+      state.tasks.push(taskdata);
+    },
+  },
 });
+
+export const selectTasks = (state: RootState) => {
+  return state.todo.tasks;
+};
+
+export const { addTask } = taskSlice.actions;
 
 export default taskSlice.reducer;
